@@ -28,6 +28,25 @@ LinkedList* create_list() {
     return ll;
 }
 
+void free_list(LinkedList* ll) {
+    if (ll->head == NULL && ll->tail == NULL) {
+        free(ll);
+    } else if (ll->head == ll->tail) {
+        free(ll->head);
+        free(ll);
+    } else if (ll->head && ll->tail) {
+        Node* prev = ll->head;
+        Node* cur = prev->next; 
+        while (cur) {
+            free(prev);
+            prev = cur;
+            cur = cur->next;
+        }
+        free(cur);
+        free(ll);
+    }
+}
+
 void list_append(LinkedList* ll, int val) {
     Node* node = create_node(val);
 
@@ -97,5 +116,7 @@ int main() {
     list_pop(ll);
     list_pop(ll);
     list_print(ll);
+
+    free_list(ll);
 }
 

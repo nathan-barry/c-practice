@@ -23,6 +23,11 @@ RingBuffer* create_buffer(int capacity) {
     return rb;
 }
 
+void free_buffer(RingBuffer* rb) {
+    free(rb->buffer);
+    free(rb);
+}
+
 bool buffer_put(RingBuffer* rb, int val) {
     if (rb->capacity == rb->size) {
         return false;
@@ -92,6 +97,8 @@ int main() {
 
     buffer_put(rb, 1);
     buffer_print(rb);
+
+    free_buffer(rb);
 }
 
 

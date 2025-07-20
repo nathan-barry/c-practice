@@ -27,18 +27,26 @@ Heap* create_heap() {
     return h;
 }
 
+void free_heap(Heap* h) {
+    Node* prev = h->head;
+    Node* cur = h->head->next;
+
+    while (cur) {
+        free(prev);
+        prev = cur;
+        cur = cur->next;
+    }
+    free(cur);
+    free(h);
+}
+
 void heap_append(Heap* h, char* str, unsigned priority) {
     Node* node = create_node(str, priority);
 
     Node* prev = h->head;
     Node* cur = h->head->next;
 
-    if (!cur) {
-        prev->next = node;
-        return;
-    }
-
-    do {
+    while (cur) {
         if (priority < cur->priority) {
             prev->next = node;
             node->next = cur;
@@ -47,7 +55,6 @@ void heap_append(Heap* h, char* str, unsigned priority) {
         prev = cur;
         cur = cur->next;
     }
-    while (cur);
 
     prev->next = node;
 }
@@ -58,6 +65,8 @@ char* heap_pop(Heap* h) {
     }
     Node* node = h->head->next;
     h->head->next = h->head->next->next;
+
+    char* ret = node->str;
 
     return node->str;
 }
@@ -101,4 +110,6 @@ int main() {
     heap_pop(h);
 
     heap_print(h);
+
+    free_heap(h);
 }
