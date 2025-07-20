@@ -1,7 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-
 typedef struct Node {
     int val;
     struct Node* prev;
